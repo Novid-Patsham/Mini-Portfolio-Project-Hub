@@ -13,3 +13,7 @@ Data Analytics Portfolio Projects utilizing concepts such as Data Cleaning, Visu
 
 * Data Cleaning done on Housing Data from Kaggle through SQL.
 
+#### Movie Project
+
+* Data wrangling and analysis done using R to identify how various factors affect the movie gross revenue. 
+
