@@ -143,10 +143,10 @@ ORDER BY 2;
 
 
 SELECT SoldAsVacant,
-		CASE WHEN SoldAsVacant = 'Y' THEN 'Yes'
-			 WHEN SoldAsVacant = 'N' THEN 'No'
-			 ELSE SoldAsVacant
-			 END
+	CASE WHEN SoldAsVacant = 'Y' THEN 'Yes'
+		 WHEN SoldAsVacant = 'N' THEN 'No'
+		 ELSE SoldAsVacant
+		 END
 FROM HousingData_Cleaning
 ORDER BY SoldAsVacant;
 
@@ -159,10 +159,10 @@ The above displays the required result. Now to update
 
 UPDATE HousingData_Cleaning
 SET SoldAsVacant = CASE 
-						WHEN SoldAsVacant = 'Y' THEN 'Yes'
-						WHEN SoldAsVacant = 'N' THEN 'No'
-						ELSE SoldAsVacant
-				   END
+			WHEN SoldAsVacant = 'Y' THEN 'Yes'
+			WHEN SoldAsVacant = 'N' THEN 'No'
+			ELSE SoldAsVacant
+	   	   END
 
 
 ---------------------------------------------------------------------------------------------------------------
@@ -179,10 +179,10 @@ CREATE VIEW DuplicateRowsView AS (
 SELECT *, 
 	ROW_NUMBER() OVER (
 	PARTITION BY ParcelID,
-				 PropertyAddress,
-				 SalePrice,
-				 SaleDateConverted,
-				 LegalReference
+		 PropertyAddress,
+		 SalePrice,
+		 SaleDateConverted,
+		 LegalReference
 	ORDER BY UniqueID ) AS RowNum
 FROM HousingData_Cleaning
 )
@@ -202,10 +202,10 @@ WITH RowNumCTE AS(
 SELECT *, 
 	ROW_NUMBER() OVER (
 	PARTITION BY ParcelID,
-				 PropertyAddress,
-				 SalePrice,
-				 SaleDateConverted,
-				 LegalReference
+		 PropertyAddress,
+		 SalePrice,
+		 SaleDateConverted,
+		 LegalReference
 	ORDER BY UniqueID ) AS RowNum
 FROM HousingData_Cleaning
 )
@@ -251,17 +251,17 @@ Columns with NULL values:
 -- Filling null in Name to 'Unknown'
 
 SELECT CASE
-		   WHEN OwnerName IS NULL THEN 'UNKNOWN'
-		   ELSE OwnerName
-	   END
+	   WHEN OwnerName IS NULL THEN 'UNKNOWN'
+	   ELSE OwnerName
+       END
 FROM HousingData_Cleaning
 
 
 UPDATE HousingData_Cleaning
 SET OwnerName = CASE
-				   WHEN OwnerName IS NULL THEN 'UNKNOWN'
-				   ELSE OwnerName
-				END
+		   WHEN OwnerName IS NULL THEN 'UNKNOWN'
+		   ELSE OwnerName
+		END
 
 SELECT OwnerName
 FROM HousingData_Cleaning
@@ -273,29 +273,29 @@ WHERE OwnerName IS NULL;
 
 SELECT Acreage, 
 	   CASE 
-			WHEN Acreage IS NULL THEN 
-				(
-				SELECT Acreage FROM (SELECT TOP 1 Acreage, COUNT(Acreage) as AcreMode
-				FROM HousingData_Cleaning
-				GROUP BY Acreage
-				ORDER BY AcreMode DESC) res
-				)
-			ELSE Acreage
+		WHEN Acreage IS NULL THEN 
+			(
+			SELECT Acreage FROM (SELECT TOP 1 Acreage, COUNT(Acreage) as AcreMode
+			FROM HousingData_Cleaning
+			GROUP BY Acreage
+			ORDER BY AcreMode DESC) res
+			)
+		ELSE Acreage
 	   END
 FROM HousingData_Cleaning;
 
 
 UPDATE HousingData_Cleaning
 SET Acreage = (CASE 
-					WHEN Acreage IS NULL THEN 
-						(
-						SELECT Acreage FROM (SELECT TOP 1 Acreage, COUNT(Acreage) as AcreMode
-						FROM HousingData_Cleaning
-						GROUP BY Acreage
-						ORDER BY AcreMode DESC) res
-						)
-					ELSE Acreage
-			  END)
+		WHEN Acreage IS NULL THEN 
+			(
+			SELECT Acreage FROM (SELECT TOP 1 Acreage, COUNT(Acreage) as AcreMode
+			FROM HousingData_Cleaning
+			GROUP BY Acreage
+			ORDER BY AcreMode DESC) res
+			)
+		ELSE Acreage
+              END)
 
 SELECT Acreage
 FROM HousingData_Cleaning
@@ -308,11 +308,11 @@ WHERE Acreage IS NULL;
 
 DECLARE @AcreMode FLOAT;
 SET @AcreMode = (
-				SELECT Acreage FROM (SELECT TOP 1 Acreage, COUNT(Acreage) as AcreMode
-				FROM HousingData_Cleaning
-				GROUP BY Acreage
-				ORDER BY AcreMode DESC) res
-				)
+		SELECT Acreage FROM (SELECT TOP 1 Acreage, COUNT(Acreage) as AcreMode
+		FROM HousingData_Cleaning
+		GROUP BY Acreage
+		ORDER BY AcreMode DESC) res
+		)
 SELECT @AcreMode AS AcreMode;
 
 /*
@@ -362,26 +362,26 @@ FROM HousingData_Cleaning;
 
 UPDATE HousingData_Cleaning
 SET LandValue = (CASE	
-					WHEN LandValue IS NULL THEN
-						(
-						SELECT FLOOR(AVG(LandValue)) from HousingData_Cleaning where Acreage = 0.17
-						)
-					ELSE LandValue
-				END),
-	BuildingValue = (CASE	
-						WHEN BuildingValue IS NULL THEN
-							(
-							SELECT FLOOR(AVG(BuildingValue)) from HousingData_Cleaning where Acreage = 0.17
-							)
-						ELSE BuildingValue
-					END),
-	TotalValue = (CASE	
-						WHEN TotalValue IS NULL THEN
-							(
-							SELECT FLOOR(AVG(TotalValue)) from HousingData_Cleaning where Acreage = 0.17
-							)
-						ELSE TotalValue
-				  END)
+			WHEN LandValue IS NULL THEN
+				(
+				SELECT FLOOR(AVG(LandValue)) from HousingData_Cleaning where Acreage = 0.17
+				)
+			ELSE LandValue
+		END),
+BuildingValue = (CASE	
+			WHEN BuildingValue IS NULL THEN
+				(
+				SELECT FLOOR(AVG(BuildingValue)) from HousingData_Cleaning where Acreage = 0.17
+				)
+			ELSE BuildingValue
+		END),
+TotalValue = (CASE	
+			WHEN TotalValue IS NULL THEN
+				(
+				SELECT FLOOR(AVG(TotalValue)) from HousingData_Cleaning where Acreage = 0.17
+				)
+			ELSE TotalValue
+	     END)
 
 SELECT * 
 FROM HousingData_Cleaning
@@ -427,7 +427,7 @@ ORDER BY Acreage,Bedrooms DESC;
 
 UPDATE HousingData_Cleaning
 SET Bedrooms =  dbo.BedroomMode(Acreage)
-				WHERE Bedrooms IS NULL
+		WHERE Bedrooms IS NULL
 
 
 
@@ -444,12 +444,12 @@ CREATE FUNCTION FullBathMode(@AcreageVal FLOAT) RETURNS INT
 BEGIN
 	DECLARE @Mode INT;
 	SET @Mode = ISNULL((
-				SELECT top 1 FullBath
-				FROM HousingData_Cleaning
-				WHERE Acreage = @AcreageVal
-				GROUP BY FullBath
-				ORDER BY COUNT(FullBath) DESC
-				),0);
+			SELECT top 1 FullBath
+			FROM HousingData_Cleaning
+			WHERE Acreage = @AcreageVal
+			GROUP BY FullBath
+			ORDER BY COUNT(FullBath) DESC
+			),0);
 	RETURN @Mode
 END
 
@@ -477,12 +477,12 @@ CREATE FUNCTION HalfBathMode(@AcreageVal FLOAT) RETURNS INT
 BEGIN
 	DECLARE @Mode INT;
 	SET @Mode = ISNULL((
-				SELECT top 1 HalfBath
-				FROM HousingData_Cleaning
-				WHERE Acreage = @AcreageVal
-				GROUP BY HalfBath
-				ORDER BY COUNT(HalfBath) DESC
-				),0);
+			SELECT top 1 HalfBath
+			FROM HousingData_Cleaning
+			WHERE Acreage = @AcreageVal
+			GROUP BY HalfBath
+			ORDER BY COUNT(HalfBath) DESC
+			),0);
 	RETURN @Mode
 END
 
@@ -495,7 +495,7 @@ ORDER BY Acreage,HalfBath DESC;
 
 UPDATE HousingData_Cleaning
 SET HalfBath =  dbo.HalfBathMode(Acreage)
-				WHERE HalfBath IS NULL
+		WHERE HalfBath IS NULL
 
 
 -- YearBuilt
@@ -528,18 +528,18 @@ CREATE FUNCTION YearBuiltMode(@AcreageVal FLOAT) RETURNS INT
 BEGIN
 	DECLARE @Mode INT;
 	SET @Mode = ISNULL(
-				(
-				SELECT top 1 YearBuilt
-				FROM HousingData_Cleaning
-				WHERE Acreage = @AcreageVal
-				GROUP BY YearBuilt
-				ORDER BY COUNT(YearBuilt) DESC
-				),
-				(SELECT TOP 1 YearBuilt
-				FROM HousingData_Cleaning
-				GROUP BY YearBuilt
-				ORDER BY COUNT(YearBuilt) DESC)
-				);
+			(
+			SELECT top 1 YearBuilt
+			FROM HousingData_Cleaning
+			WHERE Acreage = @AcreageVal
+			GROUP BY YearBuilt
+			ORDER BY COUNT(YearBuilt) DESC
+			),
+			(SELECT TOP 1 YearBuilt
+			FROM HousingData_Cleaning
+			GROUP BY YearBuilt
+			ORDER BY COUNT(YearBuilt) DESC)
+			);
 	RETURN @Mode
 END
 
@@ -554,7 +554,7 @@ ORDER BY Acreage,YearBuilt DESC;
 
 UPDATE HousingData_Cleaning
 SET YearBuilt =  dbo.YearBuiltMode(Acreage)
-				WHERE YearBuilt IS NULL
+		WHERE YearBuilt IS NULL
 
 
 
