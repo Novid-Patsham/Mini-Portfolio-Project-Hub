@@ -1,6 +1,6 @@
 # Portfolio_Projects
 
-Data Analytics Portfolio Projects utilizing concepts such as Data Cleaning, Visualization.
+Data Analytics Portfolio Projects utilizing concepts such as Data Cleaning, Wrangling, Analysis and Visualization.
 
 ## Project Description:
 
