@@ -1,6 +1,6 @@
-# Mini Portfolio Projects
+# Mini Portfolio Project Hub
 
-Data Analytics Portfolio Projects utilizing concepts such as Data Cleaning, Wrangling, Analysis and Visualization.
+This Data Analytics Portfolio Project Hub showcases concepts such as Data Cleaning, Wrangling, Analysis and Visualization using SQL Server Management, R Studio and Tableau.
 
 ## Project Description:
 
