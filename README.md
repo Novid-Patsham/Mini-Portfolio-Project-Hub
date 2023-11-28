@@ -1,4 +1,4 @@
-# Portfolio_Projects
+# Mini Portfolio Projects
 
 Data Analytics Portfolio Projects utilizing concepts such as Data Cleaning, Wrangling, Analysis and Visualization.
 
